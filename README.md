@@ -18,15 +18,18 @@
    /get_data: Retrieves data for frontend display
    Port: 8000
 
-#### Deployment
+## Deployment
 
 This project is containerized using Docker for easy deployment and management of services.
 
-## Docker Services :
+### Deployment Services :
 
 1. Backend
 2. Database
 3. Frontend
+
+### Docker hub repositories link 
+   https://hub.docker.com/repositories/ankitak012
 
 ### Docker Deployment :
 
@@ -34,6 +37,30 @@ This project is containerized using Docker for easy deployment and management of
    Note: The project includes a Dockerfile for each services, to run the project, use below command:
 
    `docker-compose up`
+
+### Kubernetes Deployment :
+
+1. Go to the k8s folder and run this command.
+
+   `kubectl apply -f <file-name>`
+
+2. Run the command show to visual dashboard
+
+   `minikube service backend-service --url`
+
+   When you run this command, you will get a link, and then you will need to enter that link into the browser.
+
+   `<ip address>/load_data`
+
+   `<ip address>/get_data/`
+
+
+   `minikube service frontend-service --url`
+
+
+
+
+
 
 ## Accessing the project :
 
@@ -73,3 +100,8 @@ This project is containerized using Docker for easy deployment and management of
 ## Project Documentation
 
 Ensure that all components and functionalities are correctly implemented as per the outlined requirements. Document the structure, setup instructions, and API details clearly for future reference and maintenance.
+
+
+
+
+

@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  containers:
+  - name: backend
+    image: ankitak012/visualization-backend
+    ports:
+    - containerPort: 8000
+    command:
+    - sh
+    - -c
+    - >
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000
+    env:
+    - name: MYSQL_DATABASE
+      value: "Dashboard"
+    - name: MYSQL_ROOT_PASSWORD
+      value: "root_password"
+    - name: MYSQL_HOST
+      value: "mysql-service"
+    - name: MYSQL_PORT
+      value: "3306"
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+  type: NodePort

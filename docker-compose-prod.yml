@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: db
+    ports:
+      - "3313:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: Dashboard
+    volumes:
+      - ./db_data:/var/lib/mysql
+    networks:
+      - backcoffer
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-proot_password",
+        ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+  backend:
+    image: ankitak012/visualization-backend 
+    container_name: backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+       condition: service_healthy
+    command:  ["sh", "-c", "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+    environment:
+      MYSQL_DATABASE: Dashboard
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+    networks:
+      - backcoffer
+
+  frontend:
+    image: ankitak012/visualization-frontend
+    container_name: frontend
+    working_dir: /code/app
+    entrypoint: /bin/sh /code/app/start.sh
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    networks:
+      - backcoffer
+
+networks:
+  backcoffer:
+    driver: "bridge"
+
+#volumes:
+  #db_data:

@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  containers:
+  - name: frontend
+    image: ankitak012/visualization-frontend
+    workingDir: /code/app
+    command:
+    - /bin/sh
+    - /code/app/start.sh
+    ports:
+    - containerPort: 5173
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  ports:
+  - protocol: TCP
+    port: 5173
+    targetPort: 5173
+  type: NodePort
+  

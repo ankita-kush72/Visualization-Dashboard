@@ -13,9 +13,9 @@ RUN rm -rf /var/lib/apt/lists/*
 WORKDIR /code/app
 
 # Copy project code
-# COPY . /code/app
+COPY . /code/app
 
-COPY requirements.txt .
+COPY requirements.txt . /code/app/
 
 # Install dependencies
 RUN pip install -r requirements.txt
